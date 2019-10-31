@@ -1,14 +1,18 @@
 //import 'dart:html';
 
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:flutter_app/Source.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:english_words/english_words.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/child1.dart';
+import 'package:flutter_app/netUtils.dart';
 
 void main() => runApp(new MyApp());
+
 
 
 //现在做标题行
@@ -83,6 +87,20 @@ class MyApp extends StatelessWidget {
       imageList..add(Image.asset("images/homePage/banner5.png", fit: BoxFit.fill));
     }
 
+    Widget _lineVertical = new Container(//数据列表里的小竖线
+      width: 0.5,
+      height: 15,
+      margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+      color: Colors.grey[500],
+      child: new Text(' '),
+    );
+    Widget _lineCross = new Container(//数据列表里的小横线
+      width: double.infinity,
+      height: 0.5,
+      color: Colors.grey[400],
+      child: new Text(' '),
+    );
+    
     Widget _lineSection = new Container(//带高度的黑色块
       width:double.infinity,
       height: 10,
@@ -526,6 +544,98 @@ class MyApp extends StatelessWidget {
               decoration:new BoxDecoration(
                   border: new Border.all(width: 0.5,color: Colors.grey[400])
               ) ,
+              child: new Column(
+                children: <Widget>[
+                  new Container(//列表1
+                     child:new Column(
+                        children: <Widget>[
+                          new Container(
+                            child:new DefaultTextStyle(
+                                style: new TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: 18
+                                ),
+                                child: new Text('珠海大炼国际物流库')
+                            ),
+                            alignment:Alignment.centerLeft,
+                          ),
+                          new Row(
+                            children: <Widget>[
+                              new Container(
+                                child: new DefaultTextStyle(
+                                    style: new TextStyle(
+                                      color:Colors.black,
+                                      fontSize: 15,
+                                    ),
+                                    child: new Text('当前有183条待处理告警')
+                                ),
+//                                flex: 7,
+                              ),
+                              _lineVertical,
+                              new Container(
+                                child: new DefaultTextStyle(
+                                  style: new TextStyle(
+                                      color: Colors.black,
+                                      fontSize:15,
+                                  ),
+                                  child: new Text('已处理9条告警'),
+                                ),
+//                                flex: 5,
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  ),
+                  _lineCross,
+                  new Container(//列表2
+                    child:new Column(
+                      children: <Widget>[
+                        new Container(
+                          child:new DefaultTextStyle(
+                              style: new TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 18
+                              ),
+                              child: new Text('珠海大炼国际物流库')
+                          ),
+                          alignment:Alignment.centerLeft,
+                        ),
+                        new Row(
+                          children: <Widget>[
+                            new Container(
+                              child: new DefaultTextStyle(
+                                  style: new TextStyle(
+                                    color:Colors.black,
+                                    fontSize: 15,
+                                  ),
+                                  child: new Text('当前有183条待处理告警')
+                              ),
+//                                flex: 7,
+                            ),
+                            _lineVertical,
+                            new Container(
+                              child: new DefaultTextStyle(
+                                style: new TextStyle(
+                                  color: Colors.black,
+                                  fontSize:15,
+                                ),
+                                child: new Text('已处理9条告警'),
+                              ),
+//                                flex: 5,
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  ),
+                  _lineCross,
+                ],
+              ),
             )
           ],
         )
@@ -543,7 +653,6 @@ class MyApp extends StatelessWidget {
             warningSection,
             normalSection,
             warningState,
-
           ],
         ),
       ),
@@ -563,53 +672,53 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class RandomWordsState extends State<RandomWords> {
-  final _suggestions = <WordPair>[];
-
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-
-  Widget _buildSuggestions() {
-    return new ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        // 对于每个建议的单词对都会调用一次itemBuilder，然后将单词对添加到ListTile行中
-        // 在偶数行，该函数会为单词对添加一个ListTile row.
-        // 在奇数行，该函数会添加一个分割线widget，来分隔相邻的词对。
-        // 注意，在小屏幕上，分割线看起来可能比较吃力。
-        itemBuilder: (context, i) {
-          // 在每一列之前，添加一个1像素高的分隔线widget
-          if (i.isOdd) return new Divider();
-
-          // 语法 "i ~/ 2" 表示i除以2，但返回值是整形（向下取整），比如i为：1, 2, 3, 4, 5
-          // 时，结果为0, 1, 1, 2, 2， 这可以计算出ListView中减去分隔线后的实际单词对数量
-          final index = i ~/ 2;
-          // 如果是建议列表中最后一个单词对
-          if (index >= _suggestions.length) {
-            // ...接着再生成10个单词对，然后添加到建议列表
-            _suggestions.addAll(generateWordPairs().take(10));
-          }
-          return _buildRow(_suggestions[index]);
-        }
-    );
-  }
-  Widget _buildRow(WordPair pair) {
-    return new ListTile(
-      title: new Text(
-        pair.asPascalCase,
-        style: _biggerFont,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Startup Name Generator'),
-      ),
-      body: _buildSuggestions(),
-    );
-  }
-}
+//class RandomWordsState extends State<RandomWords> {
+//  final _suggestions = <WordPair>[];
+//
+//  final _biggerFont = const TextStyle(fontSize: 18.0);
+//
+//  Widget _buildSuggestions() {
+//    return new ListView.builder(
+//        padding: const EdgeInsets.all(16.0),
+//        // 对于每个建议的单词对都会调用一次itemBuilder，然后将单词对添加到ListTile行中
+//        // 在偶数行，该函数会为单词对添加一个ListTile row.
+//        // 在奇数行，该函数会添加一个分割线widget，来分隔相邻的词对。
+//        // 注意，在小屏幕上，分割线看起来可能比较吃力。
+//        itemBuilder: (context, i) {
+//          // 在每一列之前，添加一个1像素高的分隔线widget
+//          if (i.isOdd) return new Divider();
+//
+//          // 语法 "i ~/ 2" 表示i除以2，但返回值是整形（向下取整），比如i为：1, 2, 3, 4, 5
+//          // 时，结果为0, 1, 1, 2, 2， 这可以计算出ListView中减去分隔线后的实际单词对数量
+//          final index = i ~/ 2;
+//          // 如果是建议列表中最后一个单词对
+//          if (index >= _suggestions.length) {
+//            // ...接着再生成10个单词对，然后添加到建议列表
+//            _suggestions.addAll(generateWordPairs().take(10));
+//          }
+//          return _buildRow(_suggestions[index]);
+//        }
+//    );
+//  }
+//  Widget _buildRow(WordPair pair) {
+//    return new ListTile(
+//      title: new Text(
+//        pair.asPascalCase,
+//        style: _biggerFont,
+//      ),
+//    );
+//  }
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return new Scaffold(
+//      appBar: new AppBar(
+//        title: new Text('Startup Name Generator'),
+//      ),
+//      body: _buildSuggestions(),
+//    );
+//  }
+//}
 
 //Column buildButtonColume(IconData icon,String label){//按钮块配置方法
 //  Color color=Theme.of(context).primaryColor;
