@@ -22,9 +22,33 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  #cupertino_icons: ^0.1.2
   english_words: ^3.1.0
-  flutter_swiper: ^1.0.6
+  #flutter_swiper: ^1.0.6
+  #加载本地图片
+  path_provider: ^0.5.0+1
+  #设置Placeholder
+  transparent_image: ^1.0.0
+  #配置图片缓存
+  cached_network_image: ^0.7.0
+  #网络请求
+  dio: ^3.0.1
+  #刷新加载
+  flutter_easyrefresh: ^2.0.4
+  #图片放大预览
+  photo_view: ^0.4.2
+  #打开url，打电话，发邮件
+  dropdown_menu: ^1.1.0 #下拉菜单
+  flutter_spinkit: ^2.1.0 #加载等待框
+  fluttertoast: any #toast提示框
+  flutter_swiper: ^1.0.2 #轮播图
+  pull_to_refresh: ^1.1.5 #下拉刷新上拉加载更多
+  video_player: ^0.6.1 #视频播放
+  flutter_svg: ^0.3.2 #展示svg图标控件
+  connectivity: ^0.3.1 #链接网络
+  flutter_image_compress: any #图片压缩
+  ota_update: any #App下载更新
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -43,13 +67,19 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - homePage/images/cat.jpg
-    - images/favicon.ico
-    - images/user@2x.png
-    - images/banner1.jpg
-    - images/banner2.jpg
-    - images/banner3.jpg
-    - images/banner4.jpg
+    - images/homePage/cat.jpg
+    - images/homePage/favicon.ico
+    - images/homePage/user@2x.png
+    - images/homePage/banner1.jpg
+    - images/homePage/banner2.jpg
+    - images/homePage/banner3.jpg
+    - images/homePage/banner4.jpg
+    - images/homePage/banner5.png
+    - images/homePage/home-features-qiyeyujing.png
+    - images/homePage/home-features-zichanxunjian.png
+    - images/homePage/home-features-qiyexunjian.png
+    - images/homePage/home-features-zhiyajinggao.png
+    - images/homePage/home-features-zichanhangqing.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
